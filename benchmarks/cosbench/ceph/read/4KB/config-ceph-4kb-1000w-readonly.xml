@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<workload name="Ceph-4KB-1000W-Readonly" description="">
+  <storage type="s3" config="accesskey=;secretkey=;endpoint="/>
+  <workflow>
+    <workstage name="init">
+      <work type="init" workers="1" config="cprefix=ceph;containers=r(1,2)"/>
+    </workstage>
+    <workstage name="prepare">
+      <work type="prepare" workers="1" config="cprefix=ceph;containers=r(1,2);objects=r(1,100);sizes=c(4)KB" hashCheck="False"/>
+    </workstage>
+    <workstage name="main">
+      <work name="main" workers="100" runtime="30">
+        <operation type="read" ratio="100" config="cprefix=ceph;containers=c(1);objects=r(1,100)"/>
+      </work>
+    </workstage>
+    <workstage name="cleanup">
+      <work type="cleanup" workers="1" config="cprefix=ceph;containers=r(1,2);objects=r(1,100)"/>
+    </workstage>
+    <workstage name="dispose">
+      <work type="dispose" workers="1" config="cprefix=ceph;containers=r(1,2)"/>
+    </workstage>
+  </workflow>
+</workload>

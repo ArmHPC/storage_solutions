@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<workload name="Juice-256MB-1W-Writeonly" description="">
+  <storage type="s3" config="accesskey=;secretkey=;endpoint=" />
+  <workflow>
+    <workstage name="init">
+      <work type="init" workers="1" config="cprefix=juice;containers=r(1,2)" />
+    </workstage>
+    <workstage name="main">
+      <work name="main" workers="1" runtime="30">
+        <operation type="write" ratio="100" config="cprefix=juice;containers=u(1,2);objects=r(1,1);sizes=c(256)MB" hashCheck="False" />
+      </work>
+    </workstage>
+    <workstage name="cleanup">
+      <work type="cleanup" workers="1" config="cprefix=juice;containers=r(1,2);objects=r(1,1)" />
+    </workstage>
+    <workstage name="dispose">
+      <work type="dispose" workers="1" config="cprefix=juice;containers=r(1,2)" />
+    </workstage>
+  </workflow>
+</workload>
